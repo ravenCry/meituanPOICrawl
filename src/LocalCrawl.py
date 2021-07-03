@@ -80,7 +80,7 @@ def crawlByDetail(poiId, poiType, offset, proxy_pool):
         return
     referer = 'https://www.meituan.com/{0}/{1}'.format(poiType, poiId)
     originUrl = 'https://www.meituan.com/{0}/{1}'.format(poiType, poiId)
-    myCookie = 'uuid=d664f42127654932a05c.1625274199.1.0.0; _lxsdk_cuid=17a69e42e789-0de26284296751-6373264-144000-17a69e42e79c8; __mta=119845559.1625274205976.1625274205976.1625274205976.1; ci=60; mtcdn=K; u=106783540; n=茗之伤; lt=McUCcGgWSDg8GuDaxdZlTO6xeFoAAAAA7w0AAEiX6cNwXG1kVHgpIpBD9s5lrr-jUNZpvBP-vbZ5Zoc22FkbGlf7kL4mkF6iXrjybw; mt_c_token=McUCcGgWSDg8GuDaxdZlTO6xeFoAAAAA7w0AAEiX6cNwXG1kVHgpIpBD9s5lrr-jUNZpvBP-vbZ5Zoc22FkbGlf7kL4mkF6iXrjybw; token=McUCcGgWSDg8GuDaxdZlTO6xeFoAAAAA7w0AAEiX6cNwXG1kVHgpIpBD9s5lrr-jUNZpvBP-vbZ5Zoc22FkbGlf7kL4mkF6iXrjybw; lsu=; token2=McUCcGgWSDg8GuDaxdZlTO6xeFoAAAAA7w0AAEiX6cNwXG1kVHgpIpBD9s5lrr-jUNZpvBP-vbZ5Zoc22FkbGlf7kL4mkF6iXrjybw; unc=茗之伤; _lxsdk=17a69e42e789-0de26284296751-6373264-144000-17a69e42e79c8; rvct=60; client-id=69d587b7-e6da-4752-821c-d8bcd8288d10; _hc.v=77289b21-a426-0acf-376d-e911a8dd82cc.1625274646; lat=36.064802; lng=120.315526; wed_user_path=6700|0; locallng=120.132428; geoType=wgs84; locallat=35.977603; Hm_lvt_dbeeb675516927da776beeb1d9802bd4=1625276079,1625276100; Hm_lpvt_dbeeb675516927da776beeb1d9802bd4=1625276100; _lx_utm=utm_source=Baidu&utm_medium=organic; firstTime=1625276569643; _lxsdk_s=17a69e42e79-49e-551-427||201'
+    myCookie = '_lxsdk_cuid=17a69e42e789-0de26284296751-6373264-144000-17a69e42e79c8; __mta=119845559.1625274205976.1625274205976.1625274205976.1; ci=60; mtcdn=K; lsu=; rvct=60; client-id=69d587b7-e6da-4752-821c-d8bcd8288d10; _hc.v=77289b21-a426-0acf-376d-e911a8dd82cc.1625274646; wed_user_path=6700|0; Hm_lvt_dbeeb675516927da776beeb1d9802bd4=1625276100,1625278067,1625278077,1625278088; uuid=e679884e496d4758afa7.1625301926.1.0.0; _lx_utm=utm_source=Baidu&utm_medium=organic; userTicket=RaTUqKEfTVEJRKucpsTxqEbWMxdZtEZAoOCSXZjM; u=106783540; n=茗之伤; lt=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; mt_c_token=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; token=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; token2=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; unc=茗之伤; _lxsdk=17a69e42e789-0de26284296751-6373264-144000-17a69e42e79c8; firstTime=1625301971091; _lxsdk_s=17a6b8b45d2-84d-284-fbb||12'
     header = {
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -132,7 +132,7 @@ def crawlByDetail(poiId, poiType, offset, proxy_pool):
         }
     try:
         proxy_ip = random.choice(proxy_pool)
-        proxies = {'https': proxy_ip}
+        proxies = {'https': "http://"+proxy_ip}
         response = requests.get(url, headers=header, params=params, proxies=proxies)
         response_json = response.text
 
