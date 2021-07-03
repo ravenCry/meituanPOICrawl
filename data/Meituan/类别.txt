@@ -1,0 +1,9 @@
+美食 https://qd.meituan.com/meishi/
+休闲娱乐 https://qd.meituan.com/xiuxianyule/
+生活服务 https://qd.meituan.com/shenghuo/
+美容 https://qd.meituan.com/jiankangliren/
+婚纱摄影 https://qd.meituan.com/jiehun/
+幼教 https://qd.meituan.com/qinzi/
+运动健身 https://qd.meituan.com/yundongjianshen/
+家居 https://qd.meituan.com/jiazhuang/
+医疗健康 https://qd.meituan.com/yiliao/
