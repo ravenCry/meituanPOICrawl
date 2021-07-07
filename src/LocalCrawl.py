@@ -80,7 +80,8 @@ def crawlByDetail(poiId, poiType, offset, proxy_pool):
         return
     referer = 'https://www.meituan.com/{0}/{1}'.format(poiType, poiId)
     originUrl = 'https://www.meituan.com/{0}/{1}'.format(poiType, poiId)
-    myCookie = '_lxsdk_cuid=17a69e42e789-0de26284296751-6373264-144000-17a69e42e79c8; __mta=119845559.1625274205976.1625274205976.1625274205976.1; ci=60; mtcdn=K; lsu=; rvct=60; client-id=69d587b7-e6da-4752-821c-d8bcd8288d10; _hc.v=77289b21-a426-0acf-376d-e911a8dd82cc.1625274646; wed_user_path=6700|0; Hm_lvt_dbeeb675516927da776beeb1d9802bd4=1625276100,1625278067,1625278077,1625278088; uuid=e679884e496d4758afa7.1625301926.1.0.0; _lx_utm=utm_source=Baidu&utm_medium=organic; userTicket=RaTUqKEfTVEJRKucpsTxqEbWMxdZtEZAoOCSXZjM; u=106783540; n=茗之伤; lt=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; mt_c_token=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; token=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; token2=vpIY7ktiwa-DgG_T9-4YPHfnYVEAAAAA6g0AACMLtxlArY-WSJJM8oLpre4BymieOwlbTASiCCEz7N-NY7FvyEVoGSrUuAr0dL8q8w; unc=茗之伤; _lxsdk=17a69e42e789-0de26284296751-6373264-144000-17a69e42e79c8; firstTime=1625301971091; _lxsdk_s=17a6b8b45d2-84d-284-fbb||12'
+    f = open("../data/Meituan/cookies.txt",encoding='utf-8')
+    myCookie = f.readline()
     header = {
         'Accept': 'application/json',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -134,53 +135,68 @@ def crawlByDetail(poiId, poiType, offset, proxy_pool):
     try:
         proxy_ip = random.choice(proxy_pool)
         proxies = {'https': "http://"+proxy_ip}
-        response = requests.get(url, headers=header, params=params, proxies=proxies)
-        response_json = response.text
-
+        # response = requests.get(url, headers=header, params=params, proxies=proxies)
+        response = requests.get(url, headers=header, params=params)
         return response.text
     except Exception as e:
         print(e)
 
 def analysePoiCommentJson(poiType, jsonStr):
-    #analyseJson = json.loads(jsonStr)
-    analyseJson = jsonStr
-    commentDatas = pd.DataFrame()
-    if poiType == 'meishi':
-        commentList = jsonStr.get('data').get('comments')
-        for commentObject in commentList:
-            print(commentObject)
-            userId = commentObject.get('userId')
-            userName = commentObject.get('userName')
-            comment = commentObject.get('comment')
-            commentTime = commentObject.get('commentTime')
-            score = commentObject.get('star')
-            row = [userId, userName, comment, commentTime, score]
-            commentDatas = commentDatas.append([row])
-        commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
-    elif poiType == 'xiuxianyule' or poiType == 'yundongjianshen':
-        commentList = jsonStr.get('data').get('commentDTOList')
-        for commentObject in commentList:
-            print(commentObject)
-            userId = commentObject.get('userId')
-            userName = commentObject.get('userName')
-            comment = commentObject.get('comment')
-            commentTime = commentObject.get('commentTimeLong')
-            score = commentObject.get('star')
-            row = [userId, userName, comment, commentTime, score]
-            commentDatas = commentDatas.append([row])
-        commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
-    elif poiType == 'shenghuo' or poiType == 'jiankangliren' or poiType == 'qinzi' or poiType == 'yiliao':
-        commentList = jsonStr.get('comments')
-        for commentObject in commentList:
-            print(commentObject)
-            userId = commentObject.get('userId')
-            userName = commentObject.get('userName')
-            comment = commentObject.get('comment')
-            commentTime = commentObject.get('commentTimeLong')
-            score = commentObject.get('star')
-            row = [userId, userName, comment, commentTime, score]
-            commentDatas = commentDatas.append([row])
-        commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a',)
+    try:
+        analyseJson = json.loads(jsonStr)
+        # analyseJson = jsonStr
+        commentDatas = pd.DataFrame()
+        if poiType == 'meishi':
+            commentList = analyseJson.get('data').get('comments')
+            for commentObject in commentList:
+                print(commentObject)
+                userId = commentObject.get('userId')
+                userName = commentObject.get('userName')
+                comment = commentObject.get('comment')
+                commentTime = commentObject.get('commentTime')
+                score = commentObject.get('star')
+                row = [userId, userName, comment, commentTime, score]
+                commentDatas = commentDatas.append([row])
+            commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
+        elif poiType == 'xiuxianyule' or poiType == 'yundongjianshen':
+            commentList = analyseJson.get('data').get('commentDTOList')
+            for commentObject in commentList:
+                print(commentObject)
+                userId = commentObject.get('userId')
+                userName = commentObject.get('userName')
+                comment = commentObject.get('comment')
+                commentTime = commentObject.get('commentTimeLong')
+                score = commentObject.get('star')
+                row = [userId, userName, comment, commentTime, score]
+                commentDatas = commentDatas.append([row])
+            commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
+        elif poiType == 'shenghuo' or poiType == 'jiankangliren' or poiType == 'qinzi' or poiType == 'yiliao':
+            commentList = analyseJson.get('comments')
+            for commentObject in commentList:
+                print(commentObject)
+                userId = commentObject.get('userId')
+                userName = commentObject.get('userName')
+                comment = commentObject.get('comment')
+                commentTime = commentObject.get('commentTimeLong')
+                score = commentObject.get('star')
+                row = [userId, userName, comment, commentTime, score]
+                commentDatas = commentDatas.append([row])
+            commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
+        elif poiType == 'jiazhuang':
+            commentList = analyseJson.get('data').get('list')
+            for commentObject in commentList:
+                print(commentObject)
+                userId = commentObject.get('reviewUser').get('userId')
+                userName = commentObject.get('reviewUser').get('nickName')
+                comment = commentObject.get('reviewText')
+                commentTime = commentObject.get('addTime')
+                score = commentObject.get('star')
+                row = [userId, userName, comment, commentTime, score]
+                commentDatas = commentDatas.append([row])
+            commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
+        return True
+    except Exception as e:
+        return False
 
 if __name__ == '__main__':
     # path = 'D:/课程/个人论文/毕业论文-new/数据集/Meituan/pages/xxyl1.html'
@@ -190,4 +206,4 @@ if __name__ == '__main__':
     # iptxt = pd.read_csv('../data/Meituan/ips.txt',header=None)
     # print(crawlByDetail(1541084094, 'meishi', 0, list(iptxt[0])))
     readJson = pd.read_json('../data/Meituan/test1.txt')
-    analysePoiCommentJson('xiuxianyule', readJson)
+    analysePoiCommentJson('jiazhuang', readJson)

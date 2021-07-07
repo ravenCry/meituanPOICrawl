@@ -77,18 +77,26 @@ def getPoiByPoiType(driver, startPage, startType=1):
     print('all over.')
 
 #根据兴趣点csv挖掘评论
-def getPoiCommentByPoiCsv():
+def getPoiCommentByPoiCsv(current_poi_type_index=0,current_poi_id_index=0,current_offset=0):
     #['poi_id','front_img','title','avg_score','all_comment_num','address']
     #读代理ip池
     iptxt = pd.read_csv('../data/Meituan/ips.txt',header=None)
     proxy_pool=list(iptxt[0])
-    for poi_type in poi_types:
-        data = pd.read_csv('../data/Meituan/poi_data_{0}.csv'.format(poi_type))
+    for i in range(current_poi_type_index,9):
+        data = pd.read_csv('../data/Meituan/poi_data_{0}.csv'.format(poi_types[i]))
         poi_id_list = list(data['poi_id'])
-        offset = 0
-        for poi_id in poi_id_list:
-            print(lc.crawlByDetail(poi_id,poi_type,offset,proxy_pool))
-            time.sleep(random.randint(0,3))
+        poi_id_n = len(poi_id_list)
+        for j in range(current_poi_id_index,poi_id_n):
+            offset = 0
+            if i==current_poi_type_index and j==current_poi_id_index:
+                offset = current_offset
+            while True:
+                jsonStr=lc.crawlByDetail(poi_id_list[j],poi_types[i],offset,proxy_pool)
+                print(jsonStr)
+                if not lc.analysePoiCommentJson(poi_types[i], jsonStr):
+                    return
+                print("crawled position:(poi_type_index){0},(poi_id_index){1},(offset){2}".format(i,j,offset))
+                offset += 10
 
 #自动获取数据
 def autoGetData(driver,startPage,startType=1):
@@ -98,4 +106,4 @@ def autoGetData(driver,startPage,startType=1):
 if __name__ == '__main__':
     #driver = get_driver()
     #autoGetData(driver,1)
-    getPoiCommentByPoiCsv()
+    getPoiCommentByPoiCsv(0,0,360)
