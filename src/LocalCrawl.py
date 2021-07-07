@@ -92,6 +92,7 @@ def crawlByDetail(poiId, poiType, offset, proxy_pool):
         'Cookie': myCookie.encode('utf-8').decode('latin1')
     }
     global params
+    global cols
     if poiType == 'meishi':
         params = {
             'uuid': '0db55011ce4444799d10.1625141968.1.0.0',
@@ -140,11 +141,53 @@ def crawlByDetail(poiId, poiType, offset, proxy_pool):
     except Exception as e:
         print(e)
 
+def analysePoiCommentJson(poiType, jsonStr):
+    #analyseJson = json.loads(jsonStr)
+    analyseJson = jsonStr
+    commentDatas = pd.DataFrame()
+    if poiType == 'meishi':
+        commentList = jsonStr.get('data').get('comments')
+        for commentObject in commentList:
+            print(commentObject)
+            userId = commentObject.get('userId')
+            userName = commentObject.get('userName')
+            comment = commentObject.get('comment')
+            commentTime = commentObject.get('commentTime')
+            score = commentObject.get('star')
+            row = [userId, userName, comment, commentTime, score]
+            commentDatas = commentDatas.append([row])
+        commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
+    elif poiType == 'xiuxianyule' or poiType == 'yundongjianshen':
+        commentList = jsonStr.get('data').get('commentDTOList')
+        for commentObject in commentList:
+            print(commentObject)
+            userId = commentObject.get('userId')
+            userName = commentObject.get('userName')
+            comment = commentObject.get('comment')
+            commentTime = commentObject.get('commentTimeLong')
+            score = commentObject.get('star')
+            row = [userId, userName, comment, commentTime, score]
+            commentDatas = commentDatas.append([row])
+        commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a')
+    elif poiType == 'shenghuo' or poiType == 'jiankangliren' or poiType == 'qinzi' or poiType == 'yiliao':
+        commentList = jsonStr.get('comments')
+        for commentObject in commentList:
+            print(commentObject)
+            userId = commentObject.get('userId')
+            userName = commentObject.get('userName')
+            comment = commentObject.get('comment')
+            commentTime = commentObject.get('commentTimeLong')
+            score = commentObject.get('star')
+            row = [userId, userName, comment, commentTime, score]
+            commentDatas = commentDatas.append([row])
+        commentDatas.to_csv('../data/Meituan/poi_comment_{0}.csv'.format(poiType),index=False,header=None,mode='a',)
 
 if __name__ == '__main__':
     # path = 'D:/课程/个人论文/毕业论文-new/数据集/Meituan/pages/xxyl1.html'
     # htmlfile = open(path, 'r', encoding='utf-8')
     # htmlhandle = htmlfile.read()
     # crawlByPoiType(htmlhandle,'xiuxianyule')
-    iptxt = pd.read_csv('../data/Meituan/ips.txt',header=None)
-    print(crawlByDetail(1541084094, 'meishi', 0, list(iptxt[0])))
+    # iptxt = pd.read_csv('../data/Meituan/ips.txt',header=None)
+    # print(crawlByDetail(1541084094, 'meishi', 0, list(iptxt[0])))
+    readJson = pd.read_json('../data/Meituan/test1.txt')
+    analysePoiCommentJson('xiuxianyule', readJson)

@@ -1,0 +1,46 @@
+meishi 
+https://www.meituan.com/meishi/api/poi/getMerchantComment
+params={
+            'uuid': '0db55011ce4444799d10.1625141968.1.0.0',
+            'platform': '1',
+            'partner': '126',
+            'originUrl': originUrl,
+            'riskLevel': '1',
+            'optimusCode': '10',
+            'id': poiId,
+            'userId': '106783540',
+            'offset': offset,
+            'pageSize': '10',
+            'sortType': '1'
+        }
+
+xiuxianyule yundongjianshen
+https://i.meituan.com/xiuxianyule/api/getCommentList
+params={
+	poiId: 1197254123,
+	offset: 0,
+	pageSize: 10,
+	sortType: 1,
+	mode: 0,
+	starRange: 10,20,30,40,50
+}
+
+shenghuo jiankangliren qinzi yiliao
+https://www.meituan.com/ptapi/poi/getcomment
+params={
+	id: 115978172
+	offset: 0
+	pageSize: 10
+	mode: 0
+	sortType: 1,
+}
+
+jiazhuang
+https://www.meituan.com/jiazhuang/shop/review/list
+params={
+	sortType: 1,
+	pageNo: 1,
+	pageSize: 10,
+	shopId: 152139072
+}
+
