@@ -106,4 +106,4 @@ def autoGetData(driver,startPage,startType=1):
 if __name__ == '__main__':
     #driver = get_driver()
     #autoGetData(driver,1)
-    getPoiCommentByPoiCsv(0,0,360)
+    getPoiCommentByPoiCsv(0,0,0)
